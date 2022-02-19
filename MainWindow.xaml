@@ -1,9 +1,9 @@
-﻿<Window x:Class="Launcher.MainWindow"
+﻿<Window x:Class="Filash.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Launcher"
+        xmlns:local="clr-namespace:Filash"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -54,12 +54,12 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <Image x:Name="bg" Height="720" VerticalAlignment="Center" Stretch="Fill" StretchDirection="Both" Source="/fabrice-nzinzi-wkf-s04-tr-008-bg-fab-exp.jpg">
+        <Image x:Name="bg" Height="720" VerticalAlignment="Center" Stretch="Fill" StretchDirection="Both" Source="C:\Users\Matéo\source\repos\Filash\Resources/bg.jpg">
             <Image.Effect>
                 <DropShadowEffect/>
             </Image.Effect>
         </Image>
-        <Image Margin="139,54,651,311" Source="C:\Users\Matéo\source\repos\Filash\Resources/logodofus.png" Stretch="Fill"/>
+        <Image Margin="139,36,651,328" Source="C:\Users\Matéo\source\repos\Filash\Resources/logodofus.png" Stretch="Fill"/>
         <Button x:Name="downloadButtons" FontFamily="Milky Nice Clean" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" FontSize="22" FontWeight="Normal" HorizontalAlignment="Left" Margin="190,422,0,0" VerticalAlignment="Top" Height="78" Width="410" Click="DownloadButton_Click" Foreground="#ffdd8d" Cursor="Hand">
             <Button.Content>
                 <Border CornerRadius="40" Height="69" Width="399" BorderBrush="Black" Background="#151515" BorderThickness="1,1,1,1" RenderTransformOrigin="0.5,0.5" >
@@ -70,7 +70,7 @@
                             <TranslateTransform/>
                         </TransformGroup>
                     </Border.RenderTransform>
-                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Width="174" Margin="120,3,0,0" Height="55" FontSize="50" Foreground="#FFE89B"><Run Text="J"/><Run Text="OUER"/></TextBlock>
+                    <TextBlock x:Name="playButton" HorizontalAlignment="Center" VerticalAlignment="Top" Width="352" Height="51" FontSize="30" Foreground="#FFE89B" FontFamily="Artifakt Element" Margin="0,9,0,0"><Run Text="       "/><Run Language="fr-fr" Text="        "/><Run Text="J"/><Run Text="OUER"/></TextBlock>
                 </Border>
             </Button.Content>
         </Button>
@@ -88,18 +88,18 @@
         <Label x:Name="version" Style="{StaticResource CustomFont2}" Content="Version" HorizontalAlignment="Left"
                Margin="57,13,0,0" VerticalAlignment="Top" Height="46" Width="107" RenderTransformOrigin="2.528,0.767" FontFamily="Segoe UI Black" FontSize="20" FontWeight="Bold" Foreground="White"/>
 
-        <Label x:Name="infoUpdate" Style="{StaticResource CustomFont}" Content="Votre jeu est à jour." HorizontalAlignment="Left" VerticalAlignment="Top" Height="36" Width="332" RenderTransformOrigin="2.528,0.767" FontFamily="Arial Black" FontSize="20" FontWeight="Normal" Foreground="#FFFFF694" Margin="229,395,0,0" Background="Transparent"/>
-
+        <Label x:Name="infoUpdate" Style="{StaticResource CustomFont}" Content="Votre jeu est à jour." HorizontalAlignment="Left" VerticalAlignment="Top" Height="36" Width="330" RenderTransformOrigin="2.528,0.767" FontFamily="Arial Black" FontSize="15" FontWeight="Normal" Foreground="#FFFFF694" Margin="219,373,0,0" Background="Transparent"/>
+        <Label x:Name="infoUpdateSecond" Style="{StaticResource CustomFont}" Content="Votre jeu est à jour." HorizontalAlignment="Left" VerticalAlignment="Top" Height="36" Width="330" RenderTransformOrigin="2.528,0.767" FontFamily="Arial Black" FontSize="15" FontWeight="Normal" Foreground="#FFFFF694" Margin="219,397,0,0" Background="Transparent"/>
         <Label x:Name="serverName" Style="{StaticResource CustomFont}" Content="2.62" HorizontalAlignment="Left" 
                Margin="139,6,0,0" VerticalAlignment="Top" Height="46" Width="84" RenderTransformOrigin="2.528,0.767" FontFamily="Segoe UI Black" FontSize="30 " FontWeight="Normal" Foreground="White" FontStyle="Italic"/>
 
         <ProgressBar x:Name="progressBar" HorizontalAlignment="Left" Height="26" Margin="148,513,0,0" VerticalAlignment="Top" Width="492" Background="#FF191919" Foreground="#FFFFD58A" BorderBrush="Black"/>
-        <Label Content="0%" HorizontalAlignment="Left" Margin="600,449,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Arial Black" FontSize="20"/>
+        <Label x:Name="dlPercent" Content="0%" HorizontalAlignment="Left" Margin="600,449,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Arial Black" FontSize="20"/>
         <Button x:Name="btnRealod" Click="researchAnotherVersion" Margin="1025,503,197,171" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" >
             <Image x:Name="gear1" Style="{StaticResource Spinner}"  Source="/icons8-refresh-64.png" Visibility="Visible" Stretch="UniformToFill" Height="40" Width="42" />
         </Button>
         <Label Content="Temps restant : " HorizontalAlignment="Left" Margin="148,544,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Arial Black"/>
-        <Label Content="30sec" HorizontalAlignment="Left" Margin="258,543,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Segoe UI Black"/>
+        <Label x:Name="timeRemaining" Content="30sec" HorizontalAlignment="Left" Margin="258,543,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Segoe UI Black"/>
 
     </Grid>
 </Window>

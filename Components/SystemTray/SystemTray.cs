@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 
-namespace Launcher.Components
+namespace Filash.Components
 {
     public class SystemTray 
     {

@@ -6,11 +6,13 @@
     <Application.Resources>
         <Style x:Key="CustomFont">
             <Setter Property="TextElement.FontFamily"
-                    Value="/Fonts/#Milky"></Setter>
+                    Value="Resources/Fonts/#One Slice"></Setter>
         </Style>
         <Style x:Key="CustomFont2">
             <Setter Property="TextElement.FontFamily"
                     Value="/Fonts/#The Quest"></Setter>
         </Style>
+        <FontFamily x:Key="NotoSansRegular">C:\Users\Matéo\source\repos\Filash\Fonts/HIROMISAKE.ttf#HIROMISAKE</FontFamily>
     </Application.Resources>
+    
 </Application>

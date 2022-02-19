@@ -1,0 +1,113 @@
+﻿<Window x:Class="Filash.CloseWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Filash"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Title="Fermer" Height="176" Width="700" FontFamily="One Slice">
+    <Window.Resources>
+        
+        <FontFamily x:Key="test" >/Fonts/#HIROMISAKE</FontFamily>
+        <Style TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="1" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Spinner" TargetType="Image">
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Image.RenderTransform">
+                <Setter.Value>
+                    <RotateTransform CenterX="12" CenterY="12" />
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                        Storyboard.TargetProperty="RenderTransform.Angle"
+                                        From="0"
+                                        To="90"
+                                        Duration="0:0:0.3"
+                                        />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Border BorderBrush="#FF010005" BorderThickness="10" HorizontalAlignment="Center" VerticalAlignment="Center" >
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="187*"/>
+                <ColumnDefinition Width="15*"/>
+                <ColumnDefinition Width="138*"/>
+            </Grid.ColumnDefinitions>
+            <Image x:Name="bg" Height="176" VerticalAlignment="Center" Stretch="UniformToFill" StretchDirection="UpOnly" Source="C:\Users\Matéo\source\repos\Filash\Resources/bggrey.jpg" Grid.ColumnSpan="3">
+                <Image.Effect>
+                    <DropShadowEffect/>
+                </Image.Effect>
+            </Image>
+
+            <Image x:Name="mob" Height="344" VerticalAlignment="Top" Stretch="Fill" StretchDirection="Both" Source="C:\Users\Matéo\source\repos\Filash\Resources/mobrouge(.png" Margin="19,-143,-31,0" Grid.Column="2"/>
+            <Button x:Name="leaveButton" FontFamily="Milky Nice Clean" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" FontSize="22" FontWeight="Normal" HorizontalAlignment="Left" Margin="11,56,0,0" VerticalAlignment="Top" Height="63" Width="170" Click="ForceClose_Click" Foreground="#ffdd8d" Cursor="Hand">
+                <Button.Content>
+                    <Border CornerRadius="5" Height="59" Width="162" BorderBrush="AliceBlue" Background="Transparent" BorderThickness="1,1,1,1" RenderTransformOrigin="0.5,0.5" >
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Width="129" Height="39" FontSize="30" Foreground="AliceBlue" FontFamily="Cascadia Mono SemiBold"><Run Text="Quitter"/><Run Text=""/></TextBlock>
+                    </Border>
+                </Button.Content>
+            </Button>
+            <Button x:Name="cancelButton" FontFamily="Milky Nice Clean" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" FontSize="22" FontWeight="Normal" HorizontalAlignment="Left" Margin="193,55,0,0" VerticalAlignment="Top" Height="65" Width="173" Click="Cancel_Click" Foreground="#ffdd8d" Cursor="Hand">
+                <Button.Content>
+                    <Border CornerRadius="5" Height="59" Width="162" BorderBrush="AliceBlue" Background="Transparent" BorderThickness="1,1,1,1" RenderTransformOrigin="0.5,0.5" >
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Width="122" Height="36" FontSize="30" Foreground="AliceBlue" FontFamily="HIRO MISAKE"><Run Text="Annuler"/><Run Text=""/></TextBlock>
+                    </Border>
+                </Button.Content>
+            </Button>
+            <Label Content="Voulez vous vraiment quitter le Launcher ?"    HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Width="374" FontSize="18" Foreground="White" Height="32" Grid.ColumnSpan="2" FontWeight="Normal" FontStyle="Italic" FontFamily="{StaticResource NotoSansRegular}" />
+            <Rectangle HorizontalAlignment="Left" Height="412" Margin="369,-21,0,0" Stroke="Black" VerticalAlignment="Top" Width="13" Fill="Black" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2">
+                <Rectangle.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="17.347"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Rectangle.RenderTransform>
+            </Rectangle>
+        </Grid>
+    </Border>
+</Window>
