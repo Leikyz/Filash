@@ -57,37 +57,57 @@ namespace Filash
 
 
         }
-
-        public void VerifyFiles()
+        public DateTimeOffset ReadRemoteFile()
+        {
+            DateTimeOffset result = new DateTimeOffset();
+            var wc = new WebClient();
+            var stream = wc.OpenRead("http://localhost/dofus/Zira2.10.zip");
+            var zip = new ZipArchive(stream);
+            foreach (ZipArchiveEntry x in zip.Entries.Where(x => x.Name == "launcherVersion.txt"))
+            {
+                if (x != null)
+                    result = x.LastWriteTime;
+            }
+            return result;
+        }
+        public void VerifyUpdate()
         {
             int nb = 0;
-            string currentFile;
+            infoUpdateSecond.Visibility = Visibility.Visible;
+            DateTimeOffset version = new DateTimeOffset();
             DirectoryInfo di = new DirectoryInfo(Directory.GetCurrentDirectory() + "\\app");
             FileInfo[] fiArr = di.GetFiles("*.*", SearchOption.AllDirectories);
-            ZipArchive zip = ZipFile.Open(@"C:\xampp\htdocs\dofus/Zira 2.10.zip", ZipArchiveMode.Read);
-            // progressBar.ValueChanged += verify_DownoadProgressChanged;
             Task.Run(() =>
             {
                 foreach (var entry in fiArr)
                 {
+                    if (entry.Name == "launcherVersion.txt")
+                        version = entry.LastWriteTime;
                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        foreach (ZipArchiveEntry x in zip.Entries.Where(x => x.Name == entry.Name))
-                        {
-                            if (x != null)
-                                if (x.LastWriteTime != entry.LastWriteTime)
-                                    nb += 1;
-                        }
-                        infoUpdate.Content = "Vérification du fichier : " + entry.Name;
+                        infoUpdate.Content = "Vérification du fichier : " + entry.Name + nb;
                         infoUpdateSecond.Content = nb + " / " + (fiArr.Length - 1) + " effectués";
                     }), DispatcherPriority.Render);
-                    Thread.Sleep(20);
-                   // nb += 1;
+                    Thread.Sleep(1);
+                    nb += 1;  
                 }
-            });
+                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    infoUpdate.Content = "Verification de mises à jours ";
+                    infoUpdateSecond.Visibility = Visibility.Hidden;
+                    if (version.Hour == ReadRemoteFile().Hour && version.Minute == ReadRemoteFile().Minute)
+                    {
+                        infoUpdate.Content = "Vous êtes à jour";
+                    }
+                    else
+                        infoUpdate.Content = "Une mise à jours est disponible";
+                }), DispatcherPriority.Render);
+                Thread.Sleep(20);
+            });     
+
         }
-      
-        
+
+
         //    var length =
         //    1000;
 
@@ -104,8 +124,8 @@ namespace Filash
         //        //continue;
         //    }
         //}
-                
-            
+
+
 
         private void verify_DownoadProgressChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
@@ -114,7 +134,8 @@ namespace Filash
 
         private void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
-            VerifyFiles();
+            VerifyUpdate();
+          //  MessageBox.Show(ReadRemoteFile().ToString());
             //infoUpdate.Content = "Vérification des mises à jours... ";
             //Download(@"C:\xampp\htdocs\dofus/onvatest.zip", @"C:\Users\Matéo\source\repos\Filash\bin\Debug\net6.0-windows\app/onvatest.zip");
             // MessageBox.Show(InternetSpeed("https://www.google.com/") + " kb");

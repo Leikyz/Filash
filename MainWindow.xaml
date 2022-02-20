@@ -88,8 +88,8 @@
         <Label x:Name="version" Style="{StaticResource CustomFont2}" Content="Version" HorizontalAlignment="Left"
                Margin="57,13,0,0" VerticalAlignment="Top" Height="46" Width="107" RenderTransformOrigin="2.528,0.767" FontFamily="Segoe UI Black" FontSize="20" FontWeight="Bold" Foreground="White"/>
 
-        <Label x:Name="infoUpdate" Style="{StaticResource CustomFont}" Content="Votre jeu est à jour." HorizontalAlignment="Left" VerticalAlignment="Top" Height="36" Width="330" RenderTransformOrigin="2.528,0.767" FontFamily="Arial Black" FontSize="15" FontWeight="Normal" Foreground="#FFFFF694" Margin="219,373,0,0" Background="Transparent"/>
-        <Label x:Name="infoUpdateSecond" Style="{StaticResource CustomFont}" Content="Votre jeu est à jour." HorizontalAlignment="Left" VerticalAlignment="Top" Height="36" Width="330" RenderTransformOrigin="2.528,0.767" FontFamily="Arial Black" FontSize="15" FontWeight="Normal" Foreground="#FFFFF694" Margin="219,397,0,0" Background="Transparent"/>
+        <Label x:Name="infoUpdate" Style="{StaticResource CustomFont}" Content="Votre jeu est à jour." HorizontalAlignment="Left" VerticalAlignment="Top" Height="36" Width="746" RenderTransformOrigin="2.528,0.767" FontFamily="Arial Black" FontSize="15" FontWeight="Normal" Foreground="#FFFFF694" Margin="219,373,0,0" Background="Transparent"/>
+        <Label x:Name="infoUpdateSecond" Style="{StaticResource CustomFont}" Content="Votre jeu est à jour." HorizontalAlignment="Left" VerticalAlignment="Top" Height="36" Width="699" RenderTransformOrigin="2.528,0.767" FontFamily="Arial Black" FontSize="15" FontWeight="Normal" Foreground="#FFFFF694" Margin="219,397,0,0" Background="Transparent"/>
         <Label x:Name="serverName" Style="{StaticResource CustomFont}" Content="2.62" HorizontalAlignment="Left" 
                Margin="139,6,0,0" VerticalAlignment="Top" Height="46" Width="84" RenderTransformOrigin="2.528,0.767" FontFamily="Segoe UI Black" FontSize="30 " FontWeight="Normal" Foreground="White" FontStyle="Italic"/>
 
