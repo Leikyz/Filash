@@ -11,5 +11,7 @@ namespace Filash
         public const string pathIconNotif = @"C:\Users\Matéo\source\repos\Launcher\Launcher\Resources/icon.ico";
         public static readonly Uri RSSNewsURL = new Uri("http://blog.arkalys.com/rss/");
         public const string VoteURL = "http://www.arkalys.com/vote";
+        public const bool openOnStart = false;
+        public const bool minimizeOnClose = false;
     }
 }

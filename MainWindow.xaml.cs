@@ -31,14 +31,15 @@ namespace Filash
     public partial class MainWindow : Window
     {
         private Components.SystemTray sTray;
-        private bool inUpdate;
+        private bool inUpdate = false;
         public MainWindow()
         {
+            
             InitializeComponent();
             MouseDown += Window_MouseDown;
             sTray = new Components.SystemTray();
+            infoUpdateSecond.Visibility = Visibility.Hidden;
             VerifyGame();
-            //nSystem = new NotifySystem();
         }
         #region button
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -51,9 +52,10 @@ namespace Filash
             infoUpdate.Content = "Vérification des mises à jours... ";
            // Thread.sus(1000);
             WebClient dl = new WebClient();
-            //dl.DownloadProgressChanged += new DownloadProgressChangedEventHandler(this.dl_DownloadProgressChanged);
-            //dl.DownloadFileCompleted += new AsyncCompletedEventHandler(dlCompleted);
-            //dl.DownloadFileAsync(new Uri(file), downloadTo);
+            dl.DownloadProgressChanged += new DownloadProgressChangedEventHandler(this.dl_DownloadProgressChanged);
+            dl.DownloadFileCompleted += new AsyncCompletedEventHandler(dlCompleted);
+            dl.DownloadFileAsync(new Uri(file), downloadTo);
+            dl.Dispose();
 
 
         }
@@ -61,7 +63,7 @@ namespace Filash
         {
             DateTimeOffset result = new DateTimeOffset();
             var wc = new WebClient();
-            var stream = wc.OpenRead("http://localhost/dofus/Zira2.10.zip");
+            var stream = wc.OpenRead("http://localhost/dofus/onvatest.zip");
             var zip = new ZipArchive(stream);
             foreach (ZipArchiveEntry x in zip.Entries.Where(x => x.Name == "launcherVersion.txt"))
             {
@@ -70,6 +72,8 @@ namespace Filash
             }
             return result;
         }
+
+
         public void VerifyUpdate()
         {
             int nb = 0;
@@ -98,55 +102,60 @@ namespace Filash
                     if (version.Hour == ReadRemoteFile().Hour && version.Minute == ReadRemoteFile().Minute)
                     {
                         infoUpdate.Content = "Vous êtes à jour";
+                        downloadButton.Content = "Jouer";
+                        inUpdate = false;
                     }
                     else
                         infoUpdate.Content = "Une mise à jours est disponible";
                 }), DispatcherPriority.Render);
-                Thread.Sleep(20);
+                Thread.Sleep(10);
+                inUpdate = false;
             });     
 
         }
-
-
-        //    var length =
-        //    1000;
-
-        //        Task.Run(() =>
-        //        {
-        //            for (int i = 0; i <= length; i++)
-        //            {
-        //                Application.Current.Dispatcher.BeginInvoke(new Action(() => {
-        //                    infoUpdate.Content = "Test" + i;
-        //                }), DispatcherPriority.Render);
-        //                Thread.Sleep(100);
-        //            }
-        //        });
-        //        //continue;
-        //    }
-        //}
-
-
-
-        private void verify_DownoadProgressChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void CheckUpdate()
         {
-            progressBar.Value = e.NewValue; 
+            DateTimeOffset version = new DateTimeOffset();
+            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                infoUpdate.Content = "Verification de mises à jours ";
+                infoUpdateSecond.Visibility = Visibility.Hidden;
+                if (version.Hour == ReadRemoteFile().Hour && version.Minute == ReadRemoteFile().Minute)
+                {
+                    infoUpdate.Content = "Vous êtes à jour";
+                    downloadButton.Content = "Jouer";
+                    inUpdate = false;
+                }
+                else
+                    infoUpdate.Content = "Une mise à jours est disponible";
+            }), DispatcherPriority.Render);
+            Thread.Sleep(10);
         }
-
         private void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
-            VerifyUpdate();
-          //  MessageBox.Show(ReadRemoteFile().ToString());
-            //infoUpdate.Content = "Vérification des mises à jours... ";
-            //Download(@"C:\xampp\htdocs\dofus/onvatest.zip", @"C:\Users\Matéo\source\repos\Filash\bin\Debug\net6.0-windows\app/onvatest.zip");
-            // MessageBox.Show(InternetSpeed("https://www.google.com/") + " kb");
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\app\\client_renouveau\\Dofus.exe"))
+            {
+                Process.Start(@"app\client_renouveau/Dofus.exe");
+            }
+            else
+            {
+                downloadButton.Content = "Téléchargement e...";
+                downloadButton.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FEFFD8"));
+                infoUpdate.Content = "Vérification des mises à jours... ";
+                Download(@"C:\xampp\htdocs\dofus/onvatest.zip", @"C:\Users\Matéo\source\repos\Filash\bin\Debug\net6.0-windows\app/onvatest.zip");
+                //Unzip(@"C:\Users\Matéo\source\repos\Filash\bin\Debug\net6.0-windows\app/onvatest.zip", @"C:\Users\Matéo\source\repos\Filash\bin\Debug\net6.0-windows\app");
+            }
         }
         private void parameterButton_Click(object sender, RoutedEventArgs e)
         {
-            //App.Current.Shutdown();
+            this.IsEnabled = false;
+            SettingWindow close = new SettingWindow();
+            close.Show();
+            MessageBox.Show(Settings.Default.chkClose.ToString());
         }
         private void closeButton_Click(object sender, RoutedEventArgs e)
         {
-            // this.Visibility = Visibility.Hidden;
+            this.IsEnabled = false;
             CloseWindow close = new CloseWindow();
             close.Show();
             //nSystem.ShowNotify(5000, "Information", "Le launcher a été placer dans la barre des tâches", System.Windows.Forms.ToolTipIcon.Info);
@@ -163,17 +172,20 @@ namespace Filash
         private void dlCompleted(object? sender, AsyncCompletedEventArgs e)
         {
             Unzip(@"C:\Users\Matéo\source\repos\Filash\bin\Debug\net6.0-windows\app/onvatest.zip", @"C:\Users\Matéo\source\repos\Filash\bin\Debug\net6.0-windows\app");
+            downloadButton.Content = "Jouer";
+            infoUpdate.Content = "Votre jeu est à jours";
+            dlPercent.Visibility = Visibility.Hidden;
         }
 
         private void VerifyGame()
         {
-            if (File.Exists(@"app/auth.sql"))
+            if (File.Exists(@"app\client_renouveau/version.txt"))
             {
-                playButton.Text = "Jouer";
+                downloadButton.Content = "Jouer";
             }
             else
             {
-                playButton.Text = "Télécharger Filash";
+                downloadButton.Content = "Télécharger Dofus";
             }
         }
         //public bool 
@@ -187,17 +199,8 @@ namespace Filash
         }
         public void Unzip(string file, string path)
         {
-            string zipFile = file;
-            using (ZipArchive archive = ZipFile.Open(zipFile, ZipArchiveMode.Update))
-            {
-                archive.ExtractToDirectory(path, true);
-                MessageBox.Show("fini");
-            }
-        }
-        private void researchAnotherVersion(object sender, RoutedEventArgs e)
-        {
-            //if (httpDownloader != null)
-            //    httpDownloader.Pause();
+            ZipFile.ExtractToDirectory(file, path, true);
+           // MessageBox.Show("Terminé");
         }
        
         void dl_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -206,10 +209,16 @@ namespace Filash
             double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
             double percentage = bytesIn / totalBytes * 100;
             progressBar.Value = e.ProgressPercentage;
-            dlPercent.Content = percentage + "%";
+            dlPercent.Content = (int)percentage + "%";
             infoUpdate.Content = "Téléchargement en cours : " + Math.Round(bytesIn / 1000000, 2) + " Mo / " + Math.Round(totalBytes / 1000000000, 2)  + " Go";
         }
         #endregion
 
+        private void btnPar_Copy_Click(object sender, RoutedEventArgs e)
+        {
+            inUpdate = true;
+            downloadButton.Content = "Vérification en cours";
+            VerifyUpdate();
+        }
     }
 }

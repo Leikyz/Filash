@@ -25,11 +25,12 @@ namespace Filash
         }
         public void ForceClose_Click(object sender, RoutedEventArgs e)
         {
-
+            App.Current.Shutdown();
         }
         public void Cancel_Click(object sender, RoutedEventArgs e)
         {
-
+            this.Close();
+            App.Current.MainWindow.IsEnabled = true;
         }
     }
 }

@@ -8,7 +8,7 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         ResizeMode="NoResize"
-        Title="Fermer" Height="176" Width="700" FontFamily="One Slice">
+        Title="Fermer" Height="176" Width="700" FontFamily="One Slice" Cursor="Hand">
     <Window.Resources>
         
         <FontFamily x:Key="test" >/Fonts/#HIROMISAKE</FontFamily>
@@ -97,7 +97,7 @@
                     </Border>
                 </Button.Content>
             </Button>
-            <Label Content="Voulez vous vraiment quitter le Launcher ?"    HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Width="374" FontSize="18" Foreground="White" Height="32" Grid.ColumnSpan="2" FontWeight="Normal" FontStyle="Italic" FontFamily="{StaticResource NotoSansRegular}" />
+            <Label Content="Voulez vous vraiment quitter le Launcher ?"    HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Width="374" FontSize="18" Foreground="White" Height="32" Grid.ColumnSpan="2" FontWeight="Normal" FontStyle="Italic"/>
             <Rectangle HorizontalAlignment="Left" Height="412" Margin="369,-21,0,0" Stroke="Black" VerticalAlignment="Top" Width="13" Fill="Black" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2">
                 <Rectangle.RenderTransform>
                     <TransformGroup>

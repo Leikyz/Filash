@@ -8,7 +8,7 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         ResizeMode="NoResize"
-        Title="Launcher" Height="720" Width="1280">
+        Title="Launcher" Height="536" Width="960">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -52,54 +52,107 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <SolidColorBrush x:Key="ProgressBar.Progress" Color="#FF06B025"/>
+        <SolidColorBrush x:Key="ProgressBar.Background" Color="#FFE6E6E6"/>
+        <SolidColorBrush x:Key="ProgressBar.Border" Color="#FFBCBCBC"/>
+        <Style x:Key="ProgressBarStyle1" TargetType="{x:Type ProgressBar}">
+            <Setter Property="Foreground" Value="{StaticResource ProgressBar.Progress}"/>
+            <Setter Property="Background" Value="{StaticResource ProgressBar.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ProgressBar.Border}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ProgressBar}">
+                        <Grid x:Name="TemplateRoot">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Determinate"/>
+                                    <VisualState x:Name="Indeterminate">
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="Animation" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                                                <EasingDoubleKeyFrame KeyTime="0" Value="0.25"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.25"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.25"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <PointAnimationUsingKeyFrames Storyboard.TargetName="Animation" Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)">
+                                                <EasingPointKeyFrame KeyTime="0" Value="-0.5,0.5"/>
+                                                <EasingPointKeyFrame KeyTime="0:0:1" Value="0.5,0.5"/>
+                                                <EasingPointKeyFrame KeyTime="0:0:2" Value="1.5,0.5"/>
+                                            </PointAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"/>
+                            <Rectangle x:Name="PART_Track" Margin="137,87,-137,-87"/>
+                            <Grid x:Name="PART_Indicator" ClipToBounds="true" HorizontalAlignment="Left">
+                                <Rectangle x:Name="Indicator" Fill="{TemplateBinding Foreground}"/>
+                                <Rectangle x:Name="Animation" Fill="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5">
+                                    <Rectangle.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Rectangle.RenderTransform>
+                                </Rectangle>
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="LayoutTransform" TargetName="TemplateRoot">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsIndeterminate" Value="true">
+                                <Setter Property="Visibility" TargetName="Indicator" Value="Collapsed"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Grid>
-        <Image x:Name="bg" Height="720" VerticalAlignment="Center" Stretch="Fill" StretchDirection="Both" Source="C:\Users\Matéo\source\repos\Filash\Resources/bg.jpg">
+        <Image x:Name="bg" VerticalAlignment="Center" Stretch="Fill" StretchDirection="Both" Source="C:\Users\Matéo\source\repos\Filash\Resources/bg6.jpg">
             <Image.Effect>
                 <DropShadowEffect/>
             </Image.Effect>
         </Image>
-        <Image Margin="139,36,651,328" Source="C:\Users\Matéo\source\repos\Filash\Resources/logodofus.png" Stretch="Fill"/>
-        <Button x:Name="downloadButtons" FontFamily="Milky Nice Clean" Background="Transparent" BorderThickness="0" BorderBrush="Transparent" FontSize="22" FontWeight="Normal" HorizontalAlignment="Left" Margin="190,422,0,0" VerticalAlignment="Top" Height="78" Width="410" Click="DownloadButton_Click" Foreground="#ffdd8d" Cursor="Hand">
-            <Button.Content>
-                <Border CornerRadius="40" Height="69" Width="399" BorderBrush="Black" Background="#151515" BorderThickness="1,1,1,1" RenderTransformOrigin="0.5,0.5" >
-                    <Border.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Border.RenderTransform>
-                    <TextBlock x:Name="playButton" HorizontalAlignment="Center" VerticalAlignment="Top" Width="352" Height="51" FontSize="30" Foreground="#FFE89B" FontFamily="Artifakt Element" Margin="0,9,0,0"><Run Text="       "/><Run Language="fr-fr" Text="        "/><Run Text="J"/><Run Text="OUER"/></TextBlock>
-                </Border>
-            </Button.Content>
-        </Button>
+        <Image Margin="110,36,430,207" Source="C:\Users\Matéo\source\repos\Filash\Resources/logodofus.png" Stretch="Fill"/>
         <Image x:Name="logodof"  Source="C:\Users\Matéo\source\repos\Filash\Resources/minilogo.png" Visibility="Visible" Stretch="UniformToFill" Margin="0,0,1222,659" />
-        <Button Name="btnClose" Click="closeButton_Click" Margin="1203,10,10,661" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" >
-            <Image x:Name="cross" Style="{StaticResource Spinner}"  Source="C:\Users\Matéo\source\repos\Filash\Resources/newclose.png" Visibility="Visible" Stretch="UniformToFill" Height="49" Width="49" />
+        <Button Name="btnClose" Click="closeButton_Click" Margin="882,10,10,462" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" >
+            <Image x:Name="cross" Style="{StaticResource Spinner}"  Source="C:\Users\Matéo\source\repos\Filash\Resources/newclose3.png" Visibility="Visible" Stretch="UniformToFill" Height="46" Width="45" />
         </Button>
-        <Button Name="btnMinus" Click="minusButton_Click" Margin="1126,12,87,659" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" >
-            <Image x:Name="minus" Style="{StaticResource Spinner}"  Source="C:\Users\Matéo\source\repos\Filash\Resources/minus.png" Visibility="Visible" Stretch="UniformToFill" Height="49" Width="49" />
+        <Button Name="btnMinus" Click="minusButton_Click"  Margin="813,15,0,467"  Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" HorizontalAlignment="Left" Width="64" >
+            <Image x:Name="minus" Style="{StaticResource Spinner}"  Source="C:\Users\Matéo\source\repos\Filash\Resources/minus2.png" Visibility="Visible" Stretch="UniformToFill" Height="48" Width="52" />
         </Button>
-        <Button Name="btnPar" Click="parameterButton_Click" Margin="1054,10,159,661" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" >
-            <Image x:Name="gear" Style="{StaticResource Spinner}"  Source="C:\Users\Matéo\source\repos\Filash\Resources/newgear.png" Visibility="Visible" Stretch="UniformToFill" Height="49" Width="49" />
+        <Button Name="btnPar" Click="parameterButton_Click" Margin="211,419,712,78" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" >
+            <Image x:Name="gear" Style="{StaticResource Spinner}"  Source="C:\Users\Matéo\source\repos\Filash\Resources/newgear.png" Visibility="Visible" Stretch="Fill" Height="31" Width="32" />
         </Button>
 
         <Label x:Name="version" Style="{StaticResource CustomFont2}" Content="Version" HorizontalAlignment="Left"
                Margin="57,13,0,0" VerticalAlignment="Top" Height="46" Width="107" RenderTransformOrigin="2.528,0.767" FontFamily="Segoe UI Black" FontSize="20" FontWeight="Bold" Foreground="White"/>
 
-        <Label x:Name="infoUpdate" Style="{StaticResource CustomFont}" Content="Votre jeu est à jour." HorizontalAlignment="Left" VerticalAlignment="Top" Height="36" Width="746" RenderTransformOrigin="2.528,0.767" FontFamily="Arial Black" FontSize="15" FontWeight="Normal" Foreground="#FFFFF694" Margin="219,373,0,0" Background="Transparent"/>
-        <Label x:Name="infoUpdateSecond" Style="{StaticResource CustomFont}" Content="Votre jeu est à jour." HorizontalAlignment="Left" VerticalAlignment="Top" Height="36" Width="699" RenderTransformOrigin="2.528,0.767" FontFamily="Arial Black" FontSize="15" FontWeight="Normal" Foreground="#FFFFF694" Margin="219,397,0,0" Background="Transparent"/>
+        <Label x:Name="infoUpdate" Style="{StaticResource CustomFont}" Content="Votre jeu est à jour." HorizontalAlignment="Left" VerticalAlignment="Top" Height="36" Width="746" RenderTransformOrigin="2.528,0.767" FontFamily="Arial Black" FontSize="15" FontWeight="Normal" Foreground="#FFFFF1E2" Margin="92,299,0,0" Background="Transparent"/>
+        <Label x:Name="infoUpdateSecond" Style="{StaticResource CustomFont}" Content="Votre jeu est à jour." HorizontalAlignment="Left" VerticalAlignment="Top" Height="36" Width="472" RenderTransformOrigin="2.528,0.767" FontFamily="Arial Black" FontSize="15" FontWeight="Normal" Foreground="#FFFFF694" Margin="384,60,0,0" Background="Transparent"/>
         <Label x:Name="serverName" Style="{StaticResource CustomFont}" Content="2.62" HorizontalAlignment="Left" 
-               Margin="139,6,0,0" VerticalAlignment="Top" Height="46" Width="84" RenderTransformOrigin="2.528,0.767" FontFamily="Segoe UI Black" FontSize="30 " FontWeight="Normal" Foreground="White" FontStyle="Italic"/>
+               Margin="139,6,0,0" VerticalAlignment="Top" Height="46" Width="84" RenderTransformOrigin="2.528,0.767" FontFamily="Segoe UI Black" FontSize="30 " FontWeight="Normal" Foreground="#ffdd8d" FontStyle="Italic"/>
 
-        <ProgressBar x:Name="progressBar" HorizontalAlignment="Left" Height="26" Margin="148,513,0,0" VerticalAlignment="Top" Width="492" Background="#FF191919" Foreground="#FFFFD58A" BorderBrush="Black"/>
-        <Label x:Name="dlPercent" Content="0%" HorizontalAlignment="Left" Margin="600,449,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Arial Black" FontSize="20"/>
-        <Button x:Name="btnRealod" Click="researchAnotherVersion" Margin="1025,503,197,171" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" >
-            <Image x:Name="gear1" Style="{StaticResource Spinner}"  Source="/icons8-refresh-64.png" Visibility="Visible" Stretch="UniformToFill" Height="40" Width="42" />
+        <ProgressBar x:Name="progressBar" HorizontalAlignment="Left" Height="76" Margin="74,334,0,0" VerticalAlignment="Top" Width="492" Background="#FF191919" Foreground="#FF333333" BorderBrush="Black"/>
+        <Label x:Name="dlPercent" Content="0%" HorizontalAlignment="Left" Margin="571,357,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Arial Black" FontSize="20" Height="30" Width="56"/>
+        <Button x:Name="downloadButton" FontFamily="Milky Nice Clean" Background="#FF151515" BorderThickness="0" BorderBrush="Transparent" FontSize="22" FontWeight="Normal" HorizontalAlignment="Left" Margin="77,337,0,0" VerticalAlignment="Top" Height="70" Width="486" Click="DownloadButton_Click" Content="Télécharger Dofus" Foreground="White" Cursor="Hand">
+
         </Button>
-        <Label Content="Temps restant : " HorizontalAlignment="Left" Margin="148,544,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Arial Black"/>
-        <Label x:Name="timeRemaining" Content="30sec" HorizontalAlignment="Left" Margin="258,543,0,0" VerticalAlignment="Top" Foreground="White" FontFamily="Segoe UI Black"/>
+        <Button x:Name="btnReload" Click="btnPar_Copy_Click" Margin="320,416,600,78" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" >
+            <Image x:Name="gear1" Style="{StaticResource Spinner}"  Source="C:\Users\Matéo\source\repos\Filash\Resources/repair.png" Visibility="Visible" Stretch="Fill" Height="28" Width="30" />
+        </Button>
+        <Button x:Name="btnReload_Copy" Click="btnPar_Copy_Click" Margin="440,416,480,78" Background="{x:Null}" BorderBrush="{x:Null}" Cursor="Hand" >
+            <Image x:Name="gear2" Style="{StaticResource Spinner}"  Source="C:\Users\Matéo\source\repos\Filash\Resources/news.png" Visibility="Visible" Stretch="Fill" Height="28" Width="30" />
+        </Button>
 
     </Grid>
 </Window>
