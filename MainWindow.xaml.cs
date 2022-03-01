@@ -34,18 +34,25 @@ namespace Filash
         private bool inUpdate = false;
         public MainWindow()
         {
-            
+
             InitializeComponent();
             MouseDown += Window_MouseDown;
             sTray = new Components.SystemTray();
             infoUpdateSecond.Visibility = Visibility.Hidden;
-            VerifyGame();
+
+            if (!VerifyGame())
+                downloadButton.Content = "Télécharger Dofus";
+            else if (NeedUpdate())
+                downloadButton.Content = "Faire la mise à jour";
+            else
+                downloadButton.Content = "Jouer";
         }
         #region button
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
                 DragMove();
+
         }
         public void Download(string file, string downloadTo)
         {
@@ -59,16 +66,28 @@ namespace Filash
 
 
         }
-        public DateTimeOffset ReadRemoteFile()
+        public bool NeedUpdate()
         {
-            DateTimeOffset result = new DateTimeOffset();
+            bool result = false;
             var wc = new WebClient();
-            var stream = wc.OpenRead("http://localhost/dofus/onvatest.zip");
+            var stream = wc.OpenRead("http://localhost/dofus/update.zip");
             var zip = new ZipArchive(stream);
-            foreach (ZipArchiveEntry x in zip.Entries.Where(x => x.Name == "launcherVersion.txt"))
+            FileInfo file = new FileInfo(Directory.GetCurrentDirectory() + "\\app\\version.txt");
+
+            if (file != null)
             {
-                if (x != null)
-                    result = x.LastWriteTime;
+                foreach (ZipArchiveEntry x in zip.Entries.Where(x => x.Name == "version.txt"))
+                {
+                    if (x != null)
+                    {
+                        if (file.LastWriteTime.Hour == x.LastWriteTime.Hour && x.LastWriteTime.Minute == file.LastWriteTime.Minute)
+                            result = false;
+                        else
+                            result = true;
+                    }
+                    else
+                        result = true;
+                }
             }
             return result;
         }
@@ -78,28 +97,28 @@ namespace Filash
         {
             int nb = 0;
             infoUpdateSecond.Visibility = Visibility.Visible;
-            DateTimeOffset version = new DateTimeOffset();
             DirectoryInfo di = new DirectoryInfo(Directory.GetCurrentDirectory() + "\\app");
             FileInfo[] fiArr = di.GetFiles("*.*", SearchOption.AllDirectories);
+            var wc = new WebClient();
+            var stream = wc.OpenRead("http://localhost/dofus/update.zip");         
+            downloadButton.Content = "Réparation des fichiers";
             Task.Run(() =>
             {
                 foreach (var entry in fiArr)
                 {
-                    if (entry.Name == "launcherVersion.txt")
-                        version = entry.LastWriteTime;
                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        infoUpdate.Content = "Vérification du fichier : " + entry.Name + nb;
-                        infoUpdateSecond.Content = nb + " / " + (fiArr.Length - 1) + " effectués";
+                        infoUpdate.Content = "Vérification du fichier : " + entry.Name + nb + "            " + nb + " / " + (fiArr.Length - 1) + " effectués";
+                       // infoUpdateSecond.Content = nb + " / " + (fiArr.Length - 1) + " effectués";
                     }), DispatcherPriority.Render);
                     Thread.Sleep(1);
                     nb += 1;  
                 }
                 Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    infoUpdate.Content = "Verification de mises à jours ";
+                    infoUpdate.Content = "Connexion au serveur de mises à jours";
                     infoUpdateSecond.Visibility = Visibility.Hidden;
-                    if (version.Hour == ReadRemoteFile().Hour && version.Minute == ReadRemoteFile().Minute)
+                    if (!NeedUpdate())
                     {
                         infoUpdate.Content = "Vous êtes à jour";
                         downloadButton.Content = "Jouer";
@@ -107,43 +126,28 @@ namespace Filash
                     }
                     else
                         infoUpdate.Content = "Une mise à jours est disponible";
+                        downloadButton.Content = "Télécharger la mise à jours";
                 }), DispatcherPriority.Render);
                 Thread.Sleep(10);
                 inUpdate = false;
             });     
 
         }
-        private void CheckUpdate()
-        {
-            DateTimeOffset version = new DateTimeOffset();
-            Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            {
-                infoUpdate.Content = "Verification de mises à jours ";
-                infoUpdateSecond.Visibility = Visibility.Hidden;
-                if (version.Hour == ReadRemoteFile().Hour && version.Minute == ReadRemoteFile().Minute)
-                {
-                    infoUpdate.Content = "Vous êtes à jour";
-                    downloadButton.Content = "Jouer";
-                    inUpdate = false;
-                }
-                else
-                    infoUpdate.Content = "Une mise à jours est disponible";
-            }), DispatcherPriority.Render);
-            Thread.Sleep(10);
-        }
+       
         private void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\app\\client_renouveau\\Dofus.exe"))
-            {
-                Process.Start(@"app\client_renouveau/Dofus.exe");
-            }
+
+            if (downloadButton.Content == "Jouer")
+                Process.Start(@"app/Dofus.exe");
             else
             {
-                downloadButton.Content = "Téléchargement e...";
+                if (downloadButton.Content == "Télécharger Dofus")
+                    Download(@"C:\xampp\htdocs\dofus/client.zip", @"C:\Users\Matéo\source\repos\Moi\bin\Debug\net6.0-windows/update.zip");
+                else
+                    Download(@"C:\xampp\htdocs\dofus/update.zip", @"C:\Users\Matéo\source\repos\Moi\bin\Debug\net6.0-windows/update.zip");
+                downloadButton.Content = "Téléchargement en cours";
                 downloadButton.Foreground = new System.Windows.Media.SolidColorBrush((Color)ColorConverter.ConvertFromString("#FEFFD8"));
                 infoUpdate.Content = "Vérification des mises à jours... ";
-                Download(@"C:\xampp\htdocs\dofus/onvatest.zip", @"C:\Users\Matéo\source\repos\Filash\bin\Debug\net6.0-windows\app/onvatest.zip");
-                //Unzip(@"C:\Users\Matéo\source\repos\Filash\bin\Debug\net6.0-windows\app/onvatest.zip", @"C:\Users\Matéo\source\repos\Filash\bin\Debug\net6.0-windows\app");
             }
         }
         private void parameterButton_Click(object sender, RoutedEventArgs e)
@@ -171,22 +175,20 @@ namespace Filash
 
         private void dlCompleted(object? sender, AsyncCompletedEventArgs e)
         {
-            Unzip(@"C:\Users\Matéo\source\repos\Filash\bin\Debug\net6.0-windows\app/onvatest.zip", @"C:\Users\Matéo\source\repos\Filash\bin\Debug\net6.0-windows\app");
+            Unzip(@"C:\Users\Matéo\source\repos\Moi\bin\Debug\net6.0-windows/update.zip", @"C:\Users\Matéo\source\repos\Moi\bin\Debug\net6.0-windows/app");
             downloadButton.Content = "Jouer";
             infoUpdate.Content = "Votre jeu est à jours";
             dlPercent.Visibility = Visibility.Hidden;
         }
 
-        private void VerifyGame()
+        private bool VerifyGame()
         {
-            if (File.Exists(@"app\client_renouveau/version.txt"))
-            {
-                downloadButton.Content = "Jouer";
-            }
+            bool result;
+            if (File.Exists(@"app/dofus.exe"))
+                result = true;
             else
-            {
-                downloadButton.Content = "Télécharger Dofus";
-            }
+                result = false;
+            return result;
         }
         //public bool 
         public static double InternetSpeed(string url)
@@ -217,8 +219,7 @@ namespace Filash
         private void btnPar_Copy_Click(object sender, RoutedEventArgs e)
         {
             inUpdate = true;
-            downloadButton.Content = "Vérification en cours";
             VerifyUpdate();
-        }
+        }  
     }
 }
